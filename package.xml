@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>position_to_velocity</name>
+  <version>0.0.0</version>
+  <description>The position_to_velocity package</description>
+
+
+  <maintainer email="prashant@todo.todo">prashant</maintainer>
+
+
+  <license>TODO</license>
+
+
+
+  <!--   <doc_depend>doxygen</doc_depend> -->
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>geometry_msgs</depend>
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>tf2_eigen</depend>
+  <depend>reef_msgs</depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- Other tools can request additional information be placed here -->
+
+  </export>
+</package>
