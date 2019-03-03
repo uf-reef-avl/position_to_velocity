@@ -92,7 +92,7 @@ namespace reef_estimator
       DBG("Body level rotation matrix");
       DBG(C_from_NED_to_body_level);
 
-      velocity_current.linear() = current_pose.linear().transpose() * previous_pose.linear();
+      velocity_current.linear() = current_pose.linear() * previous_pose.linear().transpose();
       velocity_current.translation() = (current_pose.translation() - previous_pose.translation()) / DT;
 
       DBG("Unfiltered Velocity NED Frame");
