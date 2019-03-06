@@ -87,8 +87,8 @@ namespace reef_estimator
         y_vel_covariance = (pow(0.01,2) + pow(0.01,2))/(DT*DT);
       }
 
-      reef_msgs::yaw_from_rotation(current_pose.linear().transpose(), yaw);
-      C_from_NED_to_body_level = reef_msgs::roll_pitch_yaw_to_rotation_321(yaw, 0.0, 0.0);
+      reef_msgs::get_yaw(current_pose.linear().transpose(), yaw);
+      C_from_NED_to_body_level = reef_msgs::roll_pitch_yaw_to_rotation_321(0.0, 0.0, yaw);
       DBG("Body level rotation matrix");
       DBG(C_from_NED_to_body_level);
 
