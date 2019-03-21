@@ -6,7 +6,11 @@ The node currently subscribes only to a [geometry_msgs/PoseStamped](http://docs.
 
 **Table of Contents**
 1. [Prerequisites](#Prerequisites)
-
+2. [Installation](#Installation)
+3. [Node Topics](#Node Topics)
+4. [Parameters](#Parameters)
+5. [Usage](#Usage)
+6. [Comments on Code](#Comments)
 
 ## Prerequisites
 There depends on the following packages:
@@ -39,6 +43,7 @@ velocity/body_level_frame [geometry_msgs/TwistWithCovarianceStamped]
 
 ## Parameters
 The node depends on the following parameters:
+
 | Parameter        | Function| Default| Type|
 | ------------- |:-------------:| -----:| -------:|
 | body_to_camera | The transform from body frame to camera frame|  None | Set of double, converted to Eigen::Affine3d |
