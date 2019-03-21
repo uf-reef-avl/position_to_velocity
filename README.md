@@ -5,12 +5,12 @@ The position_to_velocity node is a simple node that takes a pose message and con
 The node currently subscribes only to a [geometry_msgs/PoseStamped](http://docs.ros.org/api/geometry_msgs/html/msg/PoseStamped.html) message type but the code is modular to be able to subscribe to other messages types. To do so, just copy the values into an [Eigen::Affine](https://eigen.tuxfamily.org/dox/group__TutorialGeometry.html) and pass it to the process_msg(...) function.
 
 **Table of Contents**
-1. [Prerequisites](#Prerequisites)
-2. [Installation](#Installation)
-3. [Node Topics](#Node Topics)
-4. [Parameters](#Parameters)
-5. [Usage](#Usage)
-6. [Comments on Code](#Comments)
+1. [Prerequisites](#prerequisites)
+2. [Installation](###installation)
+3. [Node Topics](#node-topics)
+4. [Parameters](#parameters)
+5. [Usage](#wsage)
+6. [Comments on Code](#comments-on-code)
 
 ## Prerequisites
 There depends on the following packages:
