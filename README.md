@@ -51,7 +51,7 @@ velocity/body_level_frame [geometry_msgs/TwistWithCovarianceStamped]
 The node depends on the following parameters:
 
 | Parameter        | Function| Default| Type|
-| ------------- |:-------------:| -----:| -------:|
+|:-------------:|:-------------:|:-----:|:-------:|
 | body_to_camera | The transform from body frame to camera frame|  None | Set of double, converted to Eigen::Affine3d |
 | convert_to_ned      | Flag to convert from NWU to NED frame      |   False | bool |
 | verbose| Flag to print debug messages      |    False | bool |
