@@ -1,6 +1,12 @@
 #Position To Velocity
 
 The position_to_velocity node is a simple node that takes a pose message and converts it to velocity in the NED frame, body level frame and the camera frame. The transform to body to camera frame is gives as a parameter in a YAML file. Apart from the velcoity it also publishes an associated covariance.
+The body level frame or the local level is the body frame which is unrolled and unpitched. The figure below will help understand the frames better:
+
+![Body Level Frames](./docs/body_level.png)
+
+
+![Coordinate Frames](./docs/Coordinate_Frames.png)
 
 The node currently subscribes only to a [geometry_msgs/PoseStamped](http://docs.ros.org/api/geometry_msgs/html/msg/PoseStamped.html) message type but the code is modular to be able to subscribe to other messages types. To do so, just copy the values into an [Eigen::Affine](https://eigen.tuxfamily.org/dox/group__TutorialGeometry.html) and pass it to the process_msg(...) function.
 
