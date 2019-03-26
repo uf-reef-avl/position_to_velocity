@@ -1,6 +1,6 @@
-#Position To Velocity
+# Position To Velocity
 
-The position_to_velocity node is a simple node that takes a pose message and converts it to velocity in the NED frame, body level frame and the camera frame. The transform to body to camera frame is gives as a parameter in a YAML file. Apart from the velcoity it also publishes an associated covariance.
+The position_to_velocity node takes a pose message and converts it to velocity in the NED frame, body level frame, and the camera frame. The transform from the body frame to the camera frame is given as a parameter in a YAML file. The node also publishes the associated covariance.
 The body level frame or the local level is the body frame which is unrolled and unpitched. The figure below will help understand the frames better:
 
 ![Body Level Frames](./docs/body_level.png)
