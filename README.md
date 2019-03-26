@@ -10,7 +10,7 @@ The body level frame, also called the local level frame, is the body frame which
 
 The node currently subscribes only to a [geometry_msgs/PoseStamped](http://docs.ros.org/api/geometry_msgs/html/msg/PoseStamped.html) message type but the code is modular to be able to subscribe to other messages types. To do so, just copy the values into an [Eigen::Affine](https://eigen.tuxfamily.org/dox/group__TutorialGeometry.html) and pass it to the process_msg(...) function.
 
-**Table of Contents**
+## Table of Contents
 1. [Prerequisites](#prerequisites)
 2. [Installation](###installation)
 3. [Node Topics](#node-topics)
@@ -19,7 +19,7 @@ The node currently subscribes only to a [geometry_msgs/PoseStamped](http://docs.
 6. [Comments on Code](#comments-on-code)
 
 ## Prerequisites
-There depends on the following packages:
+The following packages are requred depencencies:
 ```xml
 geometry_msgs
 roscpp
@@ -68,7 +68,7 @@ The node can be launched using the following lines in a launch file
     </node>
 ``` 
 
-It can also be used using a *rosrun*.
+It can also be used via a *rosrun* command.
 
 ## Comments on Code
 The code uses the *std* library to generate random numbers. 
