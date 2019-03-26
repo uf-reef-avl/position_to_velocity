@@ -74,11 +74,11 @@ It can also be used via a *rosrun* command.
 The code uses the *std* library to generate random numbers. 
 
 
-In line 90 you notice that we get the yaw from the current pose from the rotation matrix portion of the homogeneous transformation (*linear() return a Matrix3d which is the rotation matrix). The function *get_yaw* expects a Direction Cosine Matrix which is the inverse of the rotation matrix. Since rotation matrices and DCM are orthonormal matrices, the inverse is the transpose. 
+In line [90](http://192.168.1.101/AVL-Summer-18/position_to_velocity/blob/master/src/position_to_velocity.cpp#L90) you notice that we get the yaw from the current pose from the rotation matrix portion of the homogeneous transformation (*linear() return a Matrix3d which is the rotation matrix). The function *get_yaw* expects a Direction Cosine Matrix which is the inverse of the rotation matrix. Since rotation matrices and DCM are orthonormal matrices, the inverse is the transpose. 
 ```c++
 reef_msgs::get_yaw(current_pose.linear().transpose(), yaw);
 ```
- Line 101 uses an [alpha-beta filter](https://en.wikipedia.org/wiki/Alpha_beta_filter) to filter out any noise. 
+ Line [101](http://192.168.1.101/AVL-Summer-18/position_to_velocity/blob/master/src/position_to_velocity.cpp#L101) uses an [alpha-beta filter](https://en.wikipedia.org/wiki/Alpha_beta_filter) to filter out any noise. 
 
 ```c++
 filtered_velocity_NED.translation() = alpha * velocity_current.translation() - (1-alpha) * velocity_previous.translation();
