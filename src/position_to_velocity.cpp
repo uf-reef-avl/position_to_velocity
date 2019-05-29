@@ -8,35 +8,34 @@
 
 namespace reef_estimator
 {
-
   PoseToVelocity::PoseToVelocity() :
   nh_(),
   nh_private_("~"),
   DT(0),
   initialized_(false)
   {
-    distribution =  std::normal_distribution<>(0,mocap_noise_std);
-    rand_numb = rand() % 100;
-    std::mt19937 engine(rand_numb);
+      nh_private_.param<bool>("convert_to_ned", convert_to_ned_, false );
+      nh_private_.param<bool>("verbose", verbose_, false );
+      nh_private_.param<double>("alpha",alpha,1);
+      nh_private_.param<double>("mocap_noise_std", mocap_noise_std, 0.001);
+      nh_private_.param<double>("update_rate", rate, 100);
+      distribution =  std::normal_distribution<>(0,mocap_noise_std);
+      rand_numb = rand() % 100;
+      std::mt19937 engine(rand_numb);
 
-    pose_stamped_subs_ = nh_.subscribe("pose_stamped",1 , &PoseToVelocity::truth_callback, this);
+      pose_stamped_subs_ = nh_.subscribe("pose_stamped",1 , &PoseToVelocity::truth_callback, this);
 
-    velocity_ned_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/ned",1);
-    velocity_camera_frame_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/camera_frame",1);
-    velocity_body_level_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/body_level_frame",1);
+      velocity_ned_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/ned",1);
+      velocity_camera_frame_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/camera_frame",1);
+      velocity_body_level_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/body_level_frame",1);
 
-    reef_msgs::loadTransform("body_to_camera",body_to_camera);
+      reef_msgs::loadTransform("body_to_camera",body_to_camera);
 
-    ROS_WARN_STREAM("Body To camera Rotation Matrix");
-    ROS_WARN_STREAM(body_to_camera.linear());
-    ROS_WARN_STREAM("Body To camera Translation");
-    ROS_WARN_STREAM(body_to_camera.translation());
+      ROS_WARN_STREAM("Body To camera Rotation Matrix");
+      ROS_WARN_STREAM(body_to_camera.linear());
+      ROS_WARN_STREAM("Body To camera Translation");
+      ROS_WARN_STREAM(body_to_camera.translation());
 
-    nh_private_.param<bool>("convert_to_ned", convert_to_ned_, false );
-    nh_private_.param<bool>("verbose", verbose_, false );
-    nh_private_.param<double>("alpha",alpha,1);
-    nh_private_.param<double>("mocap_noise_std", mocap_noise_std, 0.001);
-    nh_private_.param<double>("update_rate", rate, 20);
   }
 
   PoseToVelocity::~PoseToVelocity() {
