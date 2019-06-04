@@ -19,7 +19,8 @@ namespace reef_estimator
     rand_numb = rand() % 100;
     std::mt19937 engine(rand_numb);
 
-    pose_stamped_subs_ = nh_.subscribe("pose_stamped",1 , &PoseToVelocity::truth_callback, this);
+    pose_stamped_subs_ = nh_.subscribe<geometry_msgs::PoseStamped>("pose_stamped",1 , &PoseToVelocity::truth_callback, this);
+      nav_odom_subs_ = nh_.subscribe<nav_msgs::Odometry>("odom",1 , &PoseToVelocity::odom_callback, this);
 
     velocity_ned_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/ned",1);
     velocity_camera_frame_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/camera_frame",1);
@@ -57,6 +58,21 @@ namespace reef_estimator
     process_msg(pose_msg, msg_time_sec);
 
   }
+
+    void PoseToVelocity::odom_callback(const nav_msgs::OdometryConstPtr &msg)
+    {
+        Eigen::Affine3d pose_msg;
+        tf2::fromMsg(msg->pose.pose, pose_msg);
+
+        double msg_time_sec = msg->header.stamp.toSec();
+        vel_cov_msg.header.stamp = msg->header.stamp;
+
+        if(convert_to_ned_)
+            pose_msg = reef_msgs::convertNWU2NED(pose_msg);
+
+        process_msg(pose_msg, msg_time_sec);
+
+    }
 
 
   void PoseToVelocity::process_msg(Eigen::Affine3d& current_pose, double& current_time) {

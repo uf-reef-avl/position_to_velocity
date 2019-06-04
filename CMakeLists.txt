@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
         std_msgs
         tf2_eigen
         reef_msgs
+        nav_msgs
 )
 find_package(Eigen3 REQUIRED)
 

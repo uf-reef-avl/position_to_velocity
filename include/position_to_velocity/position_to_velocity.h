@@ -8,6 +8,7 @@
 #include <ros/ros.h>
 #include <geometry_msgs/TwistWithCovarianceStamped.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <nav_msgs/Odometry.h>
 #include <eigen3/Eigen/Core>
 #include <Eigen/Geometry>
 #include <reef_msgs/matrix_operation.h>
@@ -28,8 +29,10 @@ class PoseToVelocity {
   ros::Publisher velocity_body_level_pub_;
 
   ros::Subscriber pose_stamped_subs_;
+  ros::Subscriber nav_odom_subs_;
 
   void truth_callback(const geometry_msgs::PoseStampedConstPtr &msg);
+  void odom_callback(const nav_msgs::OdometryConstPtr &msg);
   void process_msg(Eigen::Affine3d& pose_msg, double& msg_time);
 
   geometry_msgs::TwistWithCovarianceStamped vel_cov_msg;
