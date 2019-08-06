@@ -25,7 +25,7 @@ class PoseToVelocity {
  private:
   ros::NodeHandle nh_private_;
   ros::NodeHandle nh_;
-
+  
   ros::Publisher velocity_ned_pub_;
   ros::Publisher twist_ned_pub_;
   ros::Publisher velocity_camera_frame_pub_;
