@@ -7,7 +7,9 @@
 
 #include <ros/ros.h>
 #include <geometry_msgs/TwistWithCovarianceStamped.h>
+#include <geometry_msgs/TwistStamped.h>
 #include <geometry_msgs/PoseStamped.h>
+#include <geometry_msgs/TransformStamped.h>
 #include <nav_msgs/Odometry.h>
 #include <eigen3/Eigen/Core>
 #include <Eigen/Geometry>
@@ -25,17 +27,22 @@ class PoseToVelocity {
   ros::NodeHandle nh_;
 
   ros::Publisher velocity_ned_pub_;
+  ros::Publisher twist_ned_pub_;
   ros::Publisher velocity_camera_frame_pub_;
   ros::Publisher velocity_body_level_pub_;
 
   ros::Subscriber pose_stamped_subs_;
   ros::Subscriber nav_odom_subs_;
+  ros::Subscriber transform_stamped_subs_;
 
   void truth_callback(const geometry_msgs::PoseStampedConstPtr &msg);
   void odom_callback(const nav_msgs::OdometryConstPtr &msg);
+  void transform_callback(const geometry_msgs::TransformStampedConstPtr &msg);
   void process_msg(Eigen::Affine3d& pose_msg, double& msg_time);
 
   geometry_msgs::TwistWithCovarianceStamped vel_cov_msg;
+  geometry_msgs::TwistStamped vel_msg;
+
 
   bool convert_to_ned_;
   bool initialized_;

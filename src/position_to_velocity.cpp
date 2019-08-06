@@ -26,8 +26,10 @@ namespace reef_estimator
 
       pose_stamped_subs_ = nh_.subscribe<geometry_msgs::PoseStamped>("pose_stamped",1 , &PoseToVelocity::truth_callback, this);
       nav_odom_subs_ = nh_.subscribe<nav_msgs::Odometry>("odom",1 , &PoseToVelocity::odom_callback, this);
+      transform_stamped_subs_ = nh_.subscribe<geometry_msgs::TransformStamped>("transform_stamped",1 , &PoseToVelocity::transform_callback, this);
 
       velocity_ned_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/ned",1);
+      twist_ned_pub_ = nh_.advertise<geometry_msgs::TwistStamped>("velocity",1);
       velocity_camera_frame_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/camera_frame",1);
       velocity_body_level_pub_ = nh_.advertise<geometry_msgs::TwistWithCovarianceStamped>("velocity/body_level_frame",1);
 
@@ -44,20 +46,35 @@ namespace reef_estimator
 
   }
 
-  void PoseToVelocity::truth_callback(const geometry_msgs::PoseStampedConstPtr &msg)
-  {
-    Eigen::Affine3d pose_msg;
-    tf2::fromMsg(msg->pose, pose_msg);
+    void PoseToVelocity::truth_callback(const geometry_msgs::PoseStampedConstPtr &msg)
+    {
+        Eigen::Affine3d pose_msg;
+        tf2::fromMsg(msg->pose, pose_msg);
 
-    double msg_time_sec = msg->header.stamp.toSec();
-    vel_cov_msg.header.stamp = msg->header.stamp;
+        double msg_time_sec = msg->header.stamp.toSec();
+        vel_cov_msg.header.stamp = msg->header.stamp;
 
-    if(convert_to_ned_)
-      pose_msg = reef_msgs::convertNWU2NED(pose_msg);
+        if(convert_to_ned_)
+          pose_msg = reef_msgs::convertNWU2NED(pose_msg);
 
-    process_msg(pose_msg, msg_time_sec);
+        process_msg(pose_msg, msg_time_sec);
 
-  }
+    }
+
+    void PoseToVelocity::transform_callback(const geometry_msgs::TransformStampedConstPtr &msg)
+    {
+        Eigen::Affine3d pose_msg;
+        pose_msg = tf2::transformToEigen(*msg);
+
+        double msg_time_sec = msg->header.stamp.toSec();
+        vel_cov_msg.header.stamp = msg->header.stamp;
+
+        if(convert_to_ned_)
+            pose_msg = reef_msgs::convertNWU2NED(pose_msg);
+
+        process_msg(pose_msg, msg_time_sec);
+    }
+
 
     void PoseToVelocity::odom_callback(const nav_msgs::OdometryConstPtr &msg)
     {
@@ -108,7 +125,7 @@ namespace reef_estimator
       DBG("Body level rotation matrix");
       DBG(C_from_NED_to_body_level);
 
-      velocity_current.linear() = current_pose.linear() * previous_pose.linear().transpose();
+      velocity_current.linear() = (current_pose.linear() * previous_pose.linear().transpose());
       velocity_current.translation() = (current_pose.translation() - previous_pose.translation()) / DT;
 
       DBG("Unfiltered Velocity NED Frame");
@@ -119,12 +136,22 @@ namespace reef_estimator
       DBG("Filtered Velocity NED");
       DBG(filtered_velocity_NED.translation());
 
+      Eigen::Vector3d angular_velocity;
+      Eigen::Quaterniond delta_quat;
+      delta_quat = velocity_current.linear();
+      double euler_angle = 2 * atan2(delta_quat.vec().norm(), delta_quat.w());
+      angular_velocity = delta_quat.vec()/delta_quat.vec().norm() *  (euler_angle / DT);
+
       covariance_ned_frame.diagonal() << x_vel_covariance, y_vel_covariance, 0.0;
       vel_cov_msg.twist.covariance[0] = x_vel_covariance;
       vel_cov_msg.twist.covariance[7] = y_vel_covariance;
       load_msg(filtered_velocity_NED.translation(), vel_cov_msg.twist.twist.linear);
-      velocity_ned_pub_.publish(vel_cov_msg);
+      load_msg(angular_velocity, vel_cov_msg.twist.twist.angular);
+      load_msg(filtered_velocity_NED.translation(), vel_msg.twist.linear);
+      load_msg(angular_velocity, vel_msg.twist.angular);
 
+      velocity_ned_pub_.publish(vel_cov_msg);
+      twist_ned_pub_.publish(vel_msg);
 
       filtered_velocity_camera_frame.translation() = body_to_camera.linear().transpose() * current_pose.linear().transpose() * filtered_velocity_NED.translation();
       covariance_camera_frame = body_to_camera.linear().transpose() * current_pose.linear().transpose() * covariance_ned_frame * current_pose.linear() * body_to_camera.linear();
