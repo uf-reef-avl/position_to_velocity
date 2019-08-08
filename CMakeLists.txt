@@ -27,7 +27,5 @@ add_executable(${PROJECT_NAME}_node
         include/position_to_velocity/position_to_velocity.h
         src/position_to_velocity.cpp)
 
-add_dependencies(${PROJECT_NAME}_node reef_msgs_generate_messages_cpp reef_msgs)
-
 target_link_libraries(${PROJECT_NAME}_node ${catkin_LIBRARIES} reef_msgs)
 
