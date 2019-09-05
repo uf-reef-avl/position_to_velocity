@@ -150,6 +150,9 @@ namespace reef_estimator
       load_msg(filtered_velocity_NED.translation(), vel_msg.twist.linear);
       load_msg(angular_velocity, vel_msg.twist.angular);
 
+      vel_cov_msg.header.stamp = ros::Time(current_time);
+      vel_msg.header.stamp = ros::Time(current_time);
+
       velocity_ned_pub_.publish(vel_cov_msg);
       twist_ned_pub_.publish(vel_msg);
 

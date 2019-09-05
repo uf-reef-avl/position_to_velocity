@@ -2,7 +2,7 @@
 convert_to_ned: false
 verbose: false
 alpha: 1.0
-mocap_noise_std: 0.00001
+mocap_noise_std: 0.01
    #if mocap_noise_std is zero a default CONSTANT of 0.01 is used
   #if mocap_noise_std is greater than zero, dynamic R is computed
 #using the specified standard deviation in mocap_noise_std.
