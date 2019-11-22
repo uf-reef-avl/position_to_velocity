@@ -31,7 +31,7 @@ reef_msgs
 ## Installation
 ```xml
 cd catkin_ws/src
-git clone http://192.168.1.101/AVL-Summer-18/position_to_velocity
+git clone https://github.com/uf-reef-avl/position_to_velocity/
 cd ../ && catkin_make
 
 ```
