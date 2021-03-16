@@ -131,7 +131,7 @@ namespace reef_estimator
       DBG("Unfiltered Velocity NED Frame");
       DBG(velocity_current.translation());
 
-      filtered_velocity_NED.translation() = alpha * velocity_current.translation() - (1-alpha) * velocity_previous.translation();
+      filtered_velocity_NED.translation() = alpha * velocity_current.translation() + (1-alpha) * velocity_previous.translation();
 
       DBG("Filtered Velocity NED");
       DBG(filtered_velocity_NED.translation());
